@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Responsive Shader Carousel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <style>
+	* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: black;
+}
+
+body {
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.slider {
+  --x-off: 0px;
+}
+
+.slide {
+  width: 200px;
+  height: 300px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  list-style-type: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  background-position: center;
+  background-size: cover;
+  border-radius: 20px;
+  box-shadow: 0 20px 30px rgba(240, 238, 201, 0.2) inset;
+  transition: transform 0.1s, left 0.75s, top 0.75s, width 0.75s, height 0.75s;
+
+  &:nth-child(1),
+  &:nth-child(2) {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 0;
+  }
+
+  &:nth-child(2) {
+    opacity: 1;
+  }
+
+  &:nth-child(3) {
+    left: calc(var(--x-off) + 50%);
+  }
+
+  &:nth-child(4) {
+    left: calc(var(--x-off) + 50% + 220px);
+  }
+
+  &:nth-child(5) {
+    left: calc(var(--x-off) + 50% + 440px);
+  }
+
+  &:nth-child(6) {
+    left: calc(var(--x-off) + 50% + 660px);
+    opacity: 0;
+  }
+}
+
+.visual canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.content {
+  width: min(30vw, 400px);
+  position: absolute;
+  top: 50%;
+  left: 3rem;
+  transform: translateY(-50%);
+  font: 400 0.85rem helvetica, sans-serif, system-ui;
+  color: white;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+  hyphens: auto;
+  opacity: 0;
+  display: none;
+
+  & .title {
+    font-family: "arial-black", system-ui;
+    text-transform: uppercase;
+  }
+
+  & .description {
+    line-height: 1.7;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.8rem;
+  }
+
+  & button {
+    width: fit-content;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: white;
+    border: 2px solid white;
+    border-radius: 0.25rem;
+    padding: 0.75rem;
+    cursor: pointer;
+  }
+}
+
+.contentext{
+  position: absolute;
+  top: calc(90%+400px)
+  left: 0;
+  width: 100%;
+  padding-top: 50px;
+  font-weight: 400;
+  max-width: 80%;
+  margin: 0 auto;
+  font-size: 16px;
+  color: white;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+  word-spacing: 5px;
+  letter-spacing: 1px;
+  line-height: 1.8;
+
+
+  & .dtext {
+    line-height: 1.8;
+    margin: 1rem 0 1.5rem;
+    font-size: 16px;
+  }
+}
+
+.slide:nth-of-type(2) .content {
+  display: block;
+  animation: show 0.75s ease-in-out 0.3s forwards;
+}
+
+@keyframes show {
+  0% {
+    filter: blur(5px);
+    transform: translateY(calc(-50% + 75px));
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.nav {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  user-select: none;
+  display: flex;
+
+  & .btn {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(0, 0, 0, 0.6);
+    margin: 0 0.25rem;
+    padding: 0.75rem;
+    border-radius: 50%;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+}
+
+.icon,
+.icon * {
+  pointer-events: none;
+}
+
+.icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ripple {
+  --clr-ripple: #ccc6;
+  --clr-ripple-effect: transparent;
+  background-position: center;
+  transition: background 0.6s;
+}
+
+.ripple:hover {
+  background: var(--clr-ripple)
+    radial-gradient(circle, transparent 1%, var(--clr-ripple) 1%) center/15000%;
+}
+
+.ripple:active {
+  background-color: var(--clr-ripple-effect);
+  background-size: 100%;
+  transition: background 0s;
+}
+
+@media (width > 650px) and (width < 900px) {
+  .content {
+    & .title {
+      font-size: 1rem;
+    }
+
+    & .description {
+      font-size: 0.7rem;
+    }
+
+    & button {
+      font-size: 0.7rem;
+    }
+  }
+
+  .slide {
+    width: 160px;
+    height: 270px;
+
+    &:nth-child(3) {
+      left: calc(var(--x-off) + 50%);
+    }
+
+    &:nth-child(4) {
+      left: calc(var(--x-off) + 50% + 170px);
+    }
+
+    &:nth-child(5) {
+      left: calc(var(--x-off) + 50% + 340px);
+    }
+
+    &:nth-child(6) {
+      left: calc(var(--x-off) + 50% + 510px);
+      opacity: 0;
+    }
+  }
+}
+
+@media (width < 650px) {
+  .content {
+    & .title {
+      font-size: 0.9rem;
+    }
+
+    & .description {
+      font-size: 0.65rem;
+    }
+
+    & button {
+      font-size: 0.7rem;
+    }
+  }
+
+  .slide {
+    width: 130px;
+    height: 220px;
+
+    &:nth-child(3) {
+      left: calc(var(--x-off) + 50%);
+    }
+
+    &:nth-child(4) {
+      left: calc(var(--x-off) + 50% + 140px);
+    }
+
+    &:nth-child(5) {
+      left: calc(var(--x-off) + 50% + 280px);
+    }
+
+    &:nth-child(6) {
+      left: calc(var(--x-off) + 50% + 420px);
+      opacity: 0;
+    }
+  }
+
+  .visual {
+    width: 200px;
+    height: 150px;
+    overflow: hidden;
+    display: block;
+    object-fit: cover;
+    position: relative;
+    /* 继承 .slide 类中的样式 */
+    border-radius: inherit;
+    box-shadow: inherit;
+  }
+  
+}
+  </style>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<svg style="display: none;">
+  <path id="play" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M190.06 414l163.12-139.78a24 24 0 000-36.44L190.06 98c-15.57-13.34-39.62-2.28-39.62 18.22v279.6c0 20.5 24.05 31.56 39.62 18.18z" />
+  <path id="pause" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M176 96h16v320h-16zM320 96h16v320h-16z" />
+</svg>
+<main>
+  <ul class="slider">
+    <li class="slide">
+      <div class="visual ">
+		<img src="\img\archive.JPG">
+	  </div>
+      <div class="content">
+        <h2 class="title">Girl</h2>
+        <p class="description">Frequency: 2π seconds. An enigmatic creature that creates fascinating patterns, honoring Sophie Germain's elegant mathematics. Her movements tell an eternal story.</p>
+        <button class="more ripple">
+          <div class="icon" role="button"><svg viewBox="0 0 512 512">
+              <use xlink:href="#play"></use>
+            </svg></div>
+      <div class="contentext">
+        <p class="dtext">Frequency: 2π seconds. An enigmatic creature that creates fascinating patterns, honoring Sophie Germain's elegant mathematics. Her movements tell an eternal story.</p>
+      </div>
+        </button>
+    </li>
+    <li class="slide">
+      <div class="visual ">
+		<img src="\img\beijing.JPG">
+	  </div>
+      <div class="content">
+        <h2 class="title">PET</h2>
+        <p class="description">Frequency: 2π seconds. A smoky creature moving swiftly along the path laid down by the pioneering work of René Descartes embodies the guiding principle of the stage, where equations take on a timeless beauty.</p>
+        <button class="more ripple">
+          <div class="icon" role="button"><svg viewBox="0 0 512 512">
+              <use xlink:href="#play"></use>
+            </svg></div>
+        </button>
+    </li>
+    <li class="slide">
+      <div class="visual ">
+		<img src="\img\Friend.JPG">
+	  </div>
+      <div class="content">
+        <h2 class="title">Ada</h2>
+        <p class="description">Frequency: 4π seconds. A vibrant organism, weaves intricate patterns celebrating the analytical dance of Ada Lovelace's mind. Her movements reflect the elegance and precision found in the world of algorithms.</p>
+        <button class="more ripple">
+          <div class="icon" role="button"><svg viewBox="0 0 512 512">
+              <use xlink:href="#play"></use>
+            </svg></div>
+        </button>
+    </li>
+    <li class="slide">
+      <div class="visual ">
+		<img src="\img\Design.JPG">
+	  </div>
+      <div class="content">
+        <h2 class="title">Doug</h2>
+        <p class="description">Frequency: π seconds. A dynamic creature, navigates its realm with the agility reminiscent of Douglas Engelbart's inventive spirit. His swift movements echo the groundbreaking innovations in computer interface design.</p>
+        <button class="more ripple">
+          <div class="icon" role="button"><svg viewBox="0 0 512 512">
+              <use xlink:href="#play"></use>
+            </svg></div>
+        </button>
+    </li>
+    <li class="slide">
+      <div class="visual">
+		<img src="\img\Event.JPG">
+	  </div>
+      <div class="content">
+        <h2 class="title">Iannis</h2>
+        <p class="description">Frequency: 2π seconds. A visionary creator, conjures abstract patterns reflecting on the mathematical and artistic brilliance of Iannis Xenakis. His dance weaves a tapestry that transcends the boundaries between mathematics and art.</p>
+        <button class="more ripple">
+          <div class="icon" role="button"><svg viewBox="0 0 512 512">
+              <use xlink:href="#play"></use>
+            </svg></div>
+        </button>
+    </li>
+    <li class="slide">
+      <div class="visual">
+		<img src="\img\Tag.JPG">
+	  </div>
+      <div class="content">
+        <h2 class="title">Umar</h2>
+        <p class="description">Frequency: 4π seconds. A luminous figure, commemorating the profound insights of the Persian polymath Umar Khayyam. His graceful movements hint at the mesmerising beauty of what the human mind can create.</p>
+        <button class="more ripple">
+          <div class="icon" role="button"><svg viewBox="0 0 512 512">
+              <use xlink:href="#play"></use>
+            </svg></div>
+        </button>
+    </li>
+  </ul>
+  <nav class='nav'>
+    <div class="btn ripple prev">
+      <div class="icon" role="button"><svg viewBox="0 0 512 512">
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M244 400L100 256l144-144M120 256h292">
+          </path>
+        </svg></div>
+    </div>
+    <div class='btn ripple next'>
+      <div class="icon" role="button"><svg viewBox="0 0 512 512">
+          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M268 112l144 144-144 144M392 256H100">
+          </path>
+        </svg></div>
+    </div>
+  </nav>
+</main>
+  
+
+     
+<script type="x-shader/x-fragment" data-title="Sophie">#version 300 es
+/*********
+* made by Matthias Hurrle (@atzedent)
+*/
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+#define R resolution
+#define T mod(time,6.2831)
+#define S smoothstep
+#define rot(a) mat2(cos(a+vec4(0,11,33,0)))
+#define hue(a) (.24+.6*cos(2.3*(a)+vec3(0,83,21)))
+void main(void) {
+	vec2 uv = (gl_FragCoord.xy-.5*R)/min(R.x,R.y),
+	p=uv;
+	vec3 col = vec3(0);
+
+	uv *= 18.;
+
+	uv += vec2(
+		sin(2.*T+uv.y),
+		cos(2.*T+uv.x)
+	)*.42;
+
+	for (float i=.0; i<3.; i++) {
+		col[int(i)]=vec3(
+				2.5/(i+1.)*cos(T+i+5.*atan(uv.x,uv.y))
+			)[int(i)]*pow(S(1.,.0,length(p)),6.);
+	}
+
+	col = pow(col,vec3(.4545));
+
+	col = sqrt(col);
+	col = S(1.,.0,.55/col);
+	col = vec3(length(col));
+	col *= vec3(1,.95,.9);
+	col = hue(hue(1.1*sqrt(col)));
+
+
+	O = vec4(col,1);
+}
+</script>
+<script type="x-shader/x-fragment" data-title="René">#version 300 es
+/*********
+* made by Matthias Hurrle (@atzedent)
+*/
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+out vec4 O;
+uniform float time;
+uniform vec2 resolution;
+#define R resolution
+#define T mod(time,6.2831)
+#define S smoothstep
+#define hue(a) (.24+.6*cos(2.3*(a)+vec3(0,83,21)))
+void main(void) {
+	vec2 uv = (gl_FragCoord.xy-.5*R)/min(R.x,R.y),
+	p = uv*8.;
+	vec3 col = vec3(0);
+
+	for (float i=1.; i<4.; i++) {
+		p.x += sin(i*p.y+T);
+		p.y += sin(i*p.x+T);
+		col[int(i-1.)] += length(p)-abs(uv.x);
+	}
+
+	col = pow(col,vec3(.4545));
+	col = sqrt(col);
+	col = S(1.,.0,.5/col);
+	col = vec3(length(col));
+	col *= vec3(1,.95,.9);
+	col = hue(hue(1.5*sqrt(col)));
+	col.r=.0;
+	col *= 1.4;
+
+	O = vec4(col,1);
+}
+</script>
+<script type="x-shader/x-fragment" data-title="Ada">#version 300 es
+/*********
+* made by Matthias Hurrle (@atzedent)
+*/
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+#define R resolution
+#define T mod(time,12.56637)
+#define S smoothstep
+#define rot(a) mat2(cos(a+vec4(0,11,33,0)))
+#define hue(a) (.24+.6*cos(2.3*(a)+vec3(0,83,21)))
+void main(void) {
+	vec2 uv = (gl_FragCoord.xy-.5*R)/min(R.x,R.y),
+	p=uv;
+	vec3 col = vec3(0);
+
+	uv *= 9.;
+
+	for (float i=.0; i<3.; i++) {
+		uv.x += sin(i*uv.y+T*.5)*.8;
+		uv.y += cos(1.2+sin(i*uv.x+T));
+		col[int(i)]+=1.2/distance(p,uv)-.9;
+	}
+
+	col = pow(col,vec3(.4545));
+	col = sqrt(col);
+	col = S(1.,.0,.35/col);
+	col = vec3(length(col));
+	col *= vec3(1,.95,.9);
+	col = hue(hue(1.8*sqrt(col)));
+
+	O = vec4(col,1);
+}
+</script>
+<script type="x-shader/x-fragment" data-title="Doug">#version 300 es
+/*********
+* made by Matthias Hurrle (@atzedent)
+*/
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+#define R resolution
+#define T mod(time,3.141892)
+#define S smoothstep
+#define rot(a) mat2(cos(a+vec4(0,11,33,0)))
+#define hue(a) (.24+.6*cos(2.3*(a)+vec3(0,83,21)))
+void main(void) {
+	vec2 uv = (gl_FragCoord.xy-.5*R)/min(R.x,R.y);
+	vec3 col = vec3(0);
+
+	uv *= 5.;
+
+	vec2 p = vec2(
+		sin(T+uv.y),
+		cos(T+uv.x)
+	)*.75;
+
+	for (float i=.0; i<3.; i++) {
+		col[int(i)]+=
+				1./(i+1.)*cos(2.*i-sin(length(p)/(.55+length(uv))));
+	}
+
+	col = pow(col,vec3(.4545));
+	col = sqrt(col);
+	col.r=col.g;
+	col = hue(hue(1.9*sqrt(col)));
+	col = pow(col, vec3(1.2))*1.2;
+
+	O = vec4(col,1);
+}
+</script>
+<script type="x-shader/x-fragment" data-title="Iannis">#version 300 es
+/*********
+* made by Matthias Hurrle (@atzedent)
+*/
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+#define R resolution
+#define T mod(time,6.2831)
+#define S smoothstep
+#define hue(a) (.24+.6*cos(2.3*(a)+vec3(0,83,21)))
+
+void main(void) {
+	vec2 uv=(gl_FragCoord.xy-.5*R)/min(R.x,R.y);
+	vec3 col=vec3(0);
+	uv *= 11.;
+	uv.x+=sin(uv.y+T);
+	uv.y+=cos(1.+sin(uv.x+T));
+	col.r+=.075*tan(2./floor(1.+2.*length(uv)));
+
+	col = pow(abs(col), vec3(.4545));
+	col = sqrt(col);
+	col = S(1.,.0,.375/col);
+	col = vec3(length(col));
+	col = pow(hue(hue(sqrt(col))),vec3(1.2))*1.2;
+
+	O = vec4(col,1);
+}</script>
+<script type="x-shader/x-fragment" data-title="Umar">#version 300 es
+/*********
+* made by Matthias Hurrle (@atzedent)
+*/
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+out vec4 O;
+uniform vec2 resolution;
+uniform float time;
+#define R resolution
+#define T mod(time,12.56637)
+#define S smoothstep
+#define rot(a) mat2(cos(a+vec4(0,11,33,0)))
+#define hue(a) (.24+.6*cos(2.3*(a)+vec3(0,83,21)))
+void main(void) {
+	vec2 uv = (gl_FragCoord.xy-.5*R)/min(R.x,R.y),
+	p=uv;
+	vec3 col = vec3(0);
+
+	uv *= 2.;
+  
+  for (float i=.0; i<3.; i++) {
+		uv += vec2(
+			sin(i*uv.y+T*.5)*.8,
+			cos(1.2+sin(i*uv.x+T))
+		)*.12;
+		col[int(i)]+=cos(8.*atan(uv.x,uv.y))-length(1.4*uv);
+	}
+
+	col = pow(col,vec3(.4545));
+	col = sqrt(col);
+	col = S(1.,.0,.5/col);
+	col = vec3(length(col));
+	col *= vec3(1,.95,.9);
+	col = hue(hue(1.2*sqrt(col)));
+
+	O = vec4(col,1);
+}
+</script>
+<!-- partial -->
+  <script>
+	/*********
+ * made by Matthias Hurrle (@atzedent)
+ *
+ * Based on the work of: @noirsociety
+ * "Responsive Image Carousel (Animation)"
+ * https://codepen.io/noirsociety/pen/ZEwLGXB
+ *
+ * This implementation adds the following features:
+ * - background images rendered from GLSL shaders (two versions: low and full resolution)
+ * - play/pause button to start/stop the shader animation
+ * - swipe gestures on mobile
+ * - keyboard navigation (left/right arrow keys) and spacebar to play/pause
+ *
+ * Some less obvious changes:
+ * - despite paused, run animation on resize to adjust to the new resolution
+ * - regenerate the images with full resolution on orientation change
+ *
+ */
+
+let dpr = Math.max(1, window.devicePixelRatio);
+
+const vertexSource = `#version 300 es
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
+precision mediump float;
+#endif
+
+in vec4 position;
+
+void main(void) {
+    gl_Position = position;
+}
+`;
+
+function compile(shader, source) {
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.error(gl.getShaderInfoLog(shader));
+  }
+}
+
+let canvas,
+  gl,
+  shaders = [],
+  programs = [],
+  vertices,
+  buffer;
+
+function setup() {
+  canvas = document.createElement("canvas");
+
+  gl = canvas.getContext("webgl2");
+  const vs = gl.createShader(gl.VERTEX_SHADER);
+
+  compile(vs, vertexSource);
+
+  shaders = Array.from(
+    document.querySelectorAll("script[type='x-shader/x-fragment']")
+  );
+  programs = shaders.map(() => gl.createProgram());
+
+  for (let i = 0; i < shaders.length; i++) {
+    let addr = gl.createShader(gl.FRAGMENT_SHADER);
+    let program = programs[i];
+
+    compile(addr, shaders[i].textContent);
+    gl.attachShader(program, vs);
+    gl.attachShader(program, addr);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error(gl.getProgramInfoLog(program));
+    }
+  }
+
+  vertices = [-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1];
+
+  buffer = gl.createBuffer();
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+  for (const program of programs) {
+    const position = gl.getAttribLocation(program, "position");
+
+    gl.enableVertexAttribArray(position);
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+    // uniforms come here...
+    program.resolution = gl.getUniformLocation(program, "resolution");
+    program.time = gl.getUniformLocation(program, "time");
+  }
+}
+
+function draw(now, program) {
+  gl.clearColor(0, 0, 0, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.useProgram(program);
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  // uniforms come here...
+  gl.uniform2f(program.resolution, canvas.width, canvas.height);
+  gl.uniform1f(program.time, now * 1e-3);
+
+  gl.drawArrays(gl.TRIANGLES, 0, vertices.length * 0.5);
+}
+
+let running = false,
+  then = 0,
+  af = null;
+
+function loop(now, index) {
+  if (running) {
+    draw(now + then, programs[index]);
+    af = requestAnimationFrame((t) => loop(t, index));
+  } else {
+    then = now;
+    cancelAnimationFrame(af);
+  }
+}
+
+function removeCanvas() {
+  const canvas = document.querySelector("canvas");
+  running = false;
+
+  if (canvas) {
+    canvas.remove();
+  }
+}
+
+function setXOff(slider, value) {
+  if (!slider) {
+    slider = document.querySelector(".slider");
+  }
+
+  slider.style.setProperty("--x-off", `${value}%`);
+}
+
+function hookEvents() {
+  const slider = document.querySelector(".slider");
+
+  // The primary navigation buttons
+  function activate(e) {
+    const items = document.querySelectorAll(".slide");
+    if (e.target.closest(".nav")) {
+      setXOff(slider, 0);
+
+      setTimeout(
+        () => {
+          e.target.matches(".next") && slider.append(items[0]);
+          e.target.matches(".prev") && slider.prepend(items[items.length - 1]);
+
+          // Cleanup
+          removeCanvas();
+          document
+            .querySelectorAll(".slide .more use")
+            .forEach((p) => p.setAttribute("xlink:href", "#play"));
+        },
+        running ? 1000 : 0
+      );
+    }
+  }
+
+  // Allow swiping on mobile
+  let sliding = false;
+  let origX = 0;
+
+  function slide(e) {
+    if (!sliding) return;
+
+    const { touches } = e;
+    const first = touches[0];
+    const val = first.screenX - origX;
+
+    setXOff(slider, Math.max(-50, Math.min(50, val)));
+
+    if (val < -50) {
+      sliding = false;
+      setXOff(slider, 0);
+      document.querySelector(".next").click();
+    } else if (val > 50) {
+      sliding = false;
+      setXOff(slider, 0);
+      document.querySelector(".prev").click();
+    }
+  }
+
+  document.addEventListener("click", activate);
+  document.addEventListener("touchmove", slide);
+  document.addEventListener("touchstart", (e) => {
+    if (running) return;
+    sliding = true;
+    origX = e.touches[0].screenX;
+  });
+  document.addEventListener("touchend", () => {
+    if (running) return;
+    sliding = false;
+    setXOff(null, 0);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    const items = document.querySelectorAll(".slide");
+
+    if (e.key === "ArrowRight") {
+      document.querySelector(".next").click();
+    } else if (e.key === "ArrowLeft") {
+      document.querySelector(".prev").click();
+    } else if (e.key === " ") {
+      const button = items[1].querySelector(".more");
+      button.click();
+    }
+  });
+
+  function setupPlayButton() {
+    const listItems = document.querySelectorAll(".slide");
+
+    for (const item of listItems) {
+      const button = item.querySelector(".more");
+      const content = item.querySelector(".contentext");
+
+      button.addEventListener("click", (e) => {
+        const slide = e.target.closest(".slide");
+        running = !running;
+
+        // Toggle the play/pause icon
+        button
+          .querySelector("use")
+          .setAttribute("xlink:href", running ? "#pause" : "#play");
+
+        if (!running) {
+          // Bring back the thumbnails
+          setXOff(slider, 0);
+          content.style.display = 'none';//hide the content
+          return;
+        }
+
+        // Hide the thumbnails
+        setXOff(slider, 100);
+
+        // show the content
+        content.style.display = 'block';
+
+        console.log(content); // Check if content is correctly selected
+
+        if (slide.querySelector("canvas")) {
+          running = true;
+          loop(0, slide.dataset.shaderIndex);
+        } else {
+          // Set up the canvas and start the animation
+          animate(slide);
+        }
+
+        // Scroll to content after a slight delay
+        setTimeout(() => {
+          const contentOffset = content.offsetTop;
+          window.scrollTo({
+            top: contentOffset,
+            behavior: 'smooth' // Smooth scrolling effect
+          });
+        }, 100); // Adjust the delay as needed
+      });
+    }
+  }
+
+  setupPlayButton();
+}
+
+
+function animate(slide) {
+  const shaderIndex = slide.dataset.shaderIndex;
+  const visual = slide.querySelector(".visual");
+
+  resizeInner();
+  running = true;
+  loop(0, shaderIndex);
+  visual.append(canvas);
+}
+
+async function init() {
+  console.clear();
+  hookEvents();
+  setup();
+  resize();
+
+  // Render the shaders to background images of the slides
+  return new Promise((resolve) => {
+    for (let i = 0; i < programs.length; i++) {
+      // Decrease the resolution of all but the first two shaders to improve performance
+      if (i > 1) {
+        dpr = Math.max(1, 0.25 * window.devicePixelRatio);
+        resize();
+      }
+      draw(0, programs[i]);
+      const img = canvas.toDataURL();
+      const slide = document.querySelectorAll(".slide")[i];
+      slide.style.backgroundImage = `url(${img})`;
+      slide.dataset.shaderIndex = i;
+      slide.dataset.rerendered = `${canvas.width}x${canvas.height}`;
+      slide.querySelector(".title").textContent = shaders[i].dataset.title;
+    }
+
+    // Reset the resolution to full
+    dpr = Math.max(1, window.devicePixelRatio);
+    // When the images are loaded, regenerate the images with full resolution
+    setTimeout(async () => await regenerateImagesWithFullResolution(), 2000);
+    resolve();
+  });
+}
+
+async function regenerateImagesWithFullResolution(all = false) {
+  return new Promise((resolve) => {
+    const slides = document.querySelectorAll(".slide");
+
+    resize();
+
+    for (const slide of slides) {
+      const shaderIndex = slide.dataset.shaderIndex;
+
+      // Skip the first two shaders in the initial run (if all is false)
+      // since they are already rendered with full resolution
+      if (!all && shaderIndex < 2) continue;
+      requestAnimationFrame(() => renderBackground(slide));
+    }
+
+    resolve();
+  });
+}
+
+function renderBackground(slide) {
+  const shaderIndex = slide.dataset.shaderIndex;
+
+  draw(0, programs[shaderIndex]);
+
+  const img = canvas.toDataURL();
+
+  slide.style.backgroundImage = `url(${img})`;
+  slide.dataset.rerendered = `${canvas.width}x${canvas.height}`;
+  slide.classList.toggle("rerendered"); // help certain browsers to update the background image
+}
+
+function size(width, height) {
+  canvas.width = width;
+  canvas.height = height;
+
+  gl.viewport(0, 0, width, height);
+}
+
+function resizeInner() {
+  const { innerWidth: width, innerHeight: height } = window;
+
+  size(width * dpr, height * dpr);
+}
+
+function resize() {
+  const { width, height } = window.screen;
+
+  size(width * dpr, height * dpr);
+}
+
+window.onresize = () => {
+  resizeInner();
+
+  if (running) return;
+
+  // Run the shader animation on the current slide in order to
+  // adjust to the new resolution
+  document.querySelectorAll(".slide").forEach((slide) => {
+    if (slide.querySelector("canvas")) {
+      running = true;
+      loop(0, slide.dataset.shaderIndex);
+      running = false;
+    }
+  });
+};
+
+window.onorientationchange = async () => {
+  // Regenerate the images with the new resolution
+  resize();
+  await regenerateImagesWithFullResolution(true);
+};
+
+window.addEventListener("load", async () => await init());
+  </script>
+
+</body>
+</html>
