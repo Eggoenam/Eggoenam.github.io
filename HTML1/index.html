@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="zh-CN" >
 <head>
   <meta charset="UTF-8">
-  <title>CodePen - On-Scroll Fire Transition (WebGL + GSAP ScrollTrigger)</title>
+  <title>FIRE-UI</title>
+  <!-- <title>CodePen - On-Scroll Fire Transition (WebGL + GSAP ScrollTrigger)</title> -->
   
   <style>
     body, html {
@@ -37,23 +38,49 @@ a {
     height: 25vh;
 }
 
-.page .content {
-    max-width: 800px;
-    padding: 10px;
+.image-container1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
 }
 
-.page .last-line {
-    text-align: right;
-    padding-top: 1em;
+.image-container1 .image-box {
+    width: 400px; /* 设置图片盒子的宽度为屏幕宽度的1/3，并减去间距 */
+    margin-bottom: 20px; /* 设置图片盒子之间的垂直间距 */
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    height: 200px; /* 调整图片盒子的高度 */
+    background-size: cover;
+    background-position: center;
+    box-sizing: border-box; /* 让盒子的宽度计算包括边框和内边距 */
+    padding: 0 20px; /* 添加内边距，使图片之间有间距 */
 }
 
-.page ::-moz-selection {
-    background: #F7C02D;
+.image-container2 {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    width: 1000px;
+    margin-top: 20px auto;
 }
 
-.page ::selection {
-    background: #F7C02D;
+.image-container2 .image-box {
+    width: 300px; /* 设置图片盒子的宽度为屏幕宽度的1/3，并减去间距 */
+    margin-bottom: 20px; /* 设置图片盒子之间的垂直间距 */
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 40px;
+    height: auto; /* 保持图片比例 */
+    background-size: cover;
+    background-position: center;
+    box-sizing: border-box; /* 让盒子的宽度计算包括边框和内边距 */
+    padding: 0 20px; /* 添加内边距，使图片之间有间距 */
 }
+
+
 
 .scroll-msg {
     position: fixed;
@@ -112,37 +139,13 @@ canvas#fire-overlay {
     <div class="header">
         How it's done
     </div>
-    <div class="content">
-        <p>
-            The HTML content you're reading right now is overlaid with a full-screen <b>&lt;canvas&gt;</b> element.
-            There is a fragment shader that defines opacity and color for each pixel of the <b>&lt;canvas&gt;</b>.
-            Shader input values are <b>animation progress</b>, <b>time</b>, and <b>resolution</b>.
-        </p>
-        <p>
-            While <b>time</b> and <b>window size (resolution)</b> are super easy to gather, for <b>animation progress</b> I use <a href="https://gsap.com/docs/v3/Plugins/ScrollTrigger/" target="_blank">GSAP ScrollTrigger</a> plugin.
-        </p>
-        <p>
-            Once the inputs are prepared, we pass them as uniforms to the shader.
-            The WebGL part of this demo is a basic JS boilerplate to render a fragment shader on the single full-screen plane. No extra libraries here.
-        </p>
-        <p>
-            The fragment shader is based on <a href="https://thebookofshaders.com/13/" target="_blank">Fractal Brownian Motion (fBm)</a> noise.
-        </p>
-        <p>
-            First, we create a semi-transparent mask to define a contour of burning paper. It is basically a low-scale fBm noise with <b>animation progress</b> value used as a threshold.
-            Taking the same fBm noise with different thresholds we can
-            <br>
-            (a) darken parts of the paper so each pixel gets darker before turning transparent
-            <br>
-            (b) define the stripe along the paper edge for fire.
-        </p>
-        <p>
-            The fire is done as another two fBm based functions, one for shape and one for color. Both have a higher scale and both are animated with <b>time</b> value instead of <b>animation progress</b>.
-        </p>
-
-        <p class="last-line">
-            <a href="https://www.linkedin.com/in/ksenia-kondrashova/" target="_blank">linkedIn</a> | <a href="https://codepen.io/ksenia-k" target="_blank">codepen</a> | <a href="https://twitter.com/uuuuuulala" target="_blank">twitter (X)</a>
-        </p>
+    <div class="image-container1">
+        <a href="PET.html" class="image-box" style="background-image: url('img/1.png');">
+        <a href="PET.html" class="image-box" style="background-image: url('img/1.png');">
+    </div>
+    <div class="image-container2">
+        <a href="PET.html" class="image-box" style="background-image: url('img/1.png');">
+        <a href="PET.html" class="image-box" style="background-image: url('img/1.png');">
     </div>
 </div>
 
@@ -224,6 +227,17 @@ canvas#fire-overlay {
   <script src='https://unpkg.com/gsap@3/dist/gsap.min.js'></script>
 <script src='https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js'></script>
 <script>
+
+    // 添加 JavaScript 代码以便监听点击事件，并进行页面跳转
+    const imageBoxes = document.querySelectorAll('.image-box');
+
+    imageBoxes.forEach(box => {
+        box.addEventListener('click', function() {
+            const targetPage = this.getAttribute('href');
+            window.location.href = targetPage;
+        });
+    });
+
     const canvasEl = document.querySelector("#fire-overlay");
 const scrollMsgEl = document.querySelector(".scroll-msg");
 
@@ -347,7 +361,7 @@ function render() {
     gl.uniform1f(uniforms.u_time, currentTime);
 
     if (st.scrollTrigger.isActive && st.scrollTrigger.direction === 1) {
-        params.fireTimeAddition += .001;
+        params.fireTimeAddition += .1;
     }
 
     gl.uniform1f(uniforms.u_progress, params.fireTime + params.fireTimeAddition);

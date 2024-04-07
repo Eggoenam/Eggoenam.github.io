@@ -14,7 +14,7 @@ const gl = initShader();
 
 st = gsap.timeline({
     scrollTrigger: {
-        trigger: ".page",
+        trigger: ".PET",
         start: "0% 0%",
         end: "100% 100%",
         // markers: true,
@@ -40,7 +40,7 @@ st = gsap.timeline({
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
-gsap.set(".page", {
+gsap.set(".PET", {
     opacity: 1
 })
 
