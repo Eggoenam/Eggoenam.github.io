@@ -94,7 +94,7 @@ main {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .content {
@@ -132,29 +132,6 @@ main {
   }
 }
 
-.contentext{
-  position: absolute;
-  top: calc(90%+400px)
-  left: 0;
-  width: 100%;
-  padding-top: 50px;
-  font-weight: 400;
-  max-width: 80%;
-  margin: 0 auto;
-  font-size: 16px;
-  color: white;
-  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-  word-spacing: 5px;
-  letter-spacing: 1px;
-  line-height: 1.8;
-
-
-  & .dtext {
-    line-height: 1.8;
-    margin: 1rem 0 1.5rem;
-    font-size: 16px;
-  }
-}
 
 .slide:nth-of-type(2) .content {
   display: block;
@@ -309,7 +286,7 @@ main {
   .visual {
     width: 200px;
     height: 150px;
-    overflow: hidden;
+    overflow: auto;
     display: block;
     object-fit: cover;
     position: relative;
@@ -332,8 +309,8 @@ main {
   <ul class="slider">
     <li class="slide">
       <div class="visual ">
-		<img src="\img\archive.JPG">
-	  </div>
+        <img src="img/7.jpg">
+	    </div>
       <div class="content">
         <h2 class="title">Girl</h2>
         <p class="description">Frequency: 2π seconds. An enigmatic creature that creates fascinating patterns, honoring Sophie Germain's elegant mathematics. Her movements tell an eternal story.</p>
@@ -341,14 +318,11 @@ main {
           <div class="icon" role="button"><svg viewBox="0 0 512 512">
               <use xlink:href="#play"></use>
             </svg></div>
-      <div class="contentext">
-        <p class="dtext">Frequency: 2π seconds. An enigmatic creature that creates fascinating patterns, honoring Sophie Germain's elegant mathematics. Her movements tell an eternal story.</p>
-      </div>
         </button>
     </li>
     <li class="slide">
       <div class="visual ">
-		<img src="\img\beijing.JPG">
+		<img src="img/2.JPG">
 	  </div>
       <div class="content">
         <h2 class="title">PET</h2>
@@ -361,7 +335,7 @@ main {
     </li>
     <li class="slide">
       <div class="visual ">
-		<img src="\img\Friend.JPG">
+		<img src="img/3.JPG">
 	  </div>
       <div class="content">
         <h2 class="title">Ada</h2>
@@ -374,7 +348,7 @@ main {
     </li>
     <li class="slide">
       <div class="visual ">
-		<img src="\img\Design.JPG">
+		<img src="img/4.JPG">
 	  </div>
       <div class="content">
         <h2 class="title">Doug</h2>
@@ -387,7 +361,7 @@ main {
     </li>
     <li class="slide">
       <div class="visual">
-		<img src="\img\Event.JPG">
+		<img src="img/5.JPG">
 	  </div>
       <div class="content">
         <h2 class="title">Iannis</h2>
@@ -400,7 +374,7 @@ main {
     </li>
     <li class="slide">
       <div class="visual">
-		<img src="\img\Tag.JPG">
+		<img src="img/6.JPG">
 	  </div>
       <div class="content">
         <h2 class="title">Umar</h2>
@@ -891,7 +865,7 @@ function hookEvents() {
   });
 
   function setupPlayButton() {
-    const listItems = document.querySelectorAll(".slide");
+    const listItems = document.querySelectorAll(".slide");    
 
     for (const item of listItems) {
       const button = item.querySelector(".more");
@@ -928,15 +902,6 @@ function hookEvents() {
           // Set up the canvas and start the animation
           animate(slide);
         }
-
-        // Scroll to content after a slight delay
-        setTimeout(() => {
-          const contentOffset = content.offsetTop;
-          window.scrollTo({
-            top: contentOffset,
-            behavior: 'smooth' // Smooth scrolling effect
-          });
-        }, 100); // Adjust the delay as needed
       });
     }
   }
